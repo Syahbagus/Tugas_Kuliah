@@ -1,32 +1,22 @@
 #include <iostream>
 #include <string>
-#include <cstdlib> // untuk menggunakan stoi
 using namespace std;
 
+bool CheckNPM(string npm, int& digittahunajaran, int tahunsekarang) {
+    string thnmasuk = npm.substr(0, 2);
+    string digit20 = "20";
+    string tahunajaran = digit20 + thnmasuk;
+    digittahunajaran = stoi(tahunajaran);
 
-int masaajaran, tahunsekarang, digittahunajaran, thnmasuk;
-string npm, digit20 = "20";
-bool confirm;
-
-void CekNPM()
-{
-    if (digittahunajaran < 2003 || digittahunajaran > tahunsekarang)
-    {
+    if (digittahunajaran < 2003 || digittahunajaran > tahunsekarang) {
         cout << "NPM tidak ditemukan." << endl;
-        confirm = false;
+        return false;
     }
-    else
-    {
-        if (digittahunajaran < 2017)
-        {
-            cout << "Anda sudah lulus" << endl;
-            confirm = true;
-        }
-    }
-    
+
+    return true;
 }
 
-void CekFasilkom() {
+bool CheckFasilkom(string npm) {
     if (npm[3] == '8') {
         switch (npm[4]) {
             case '1':
@@ -47,35 +37,42 @@ void CekFasilkom() {
 
             default:
                 cout << "Bukan program studi yang dikenal";
-                break;
+                return false;
         }
         cout << endl;
-        
+        return true;
     } else {
-        confirm = false;
         cout << "Bukan fasilkom" << endl;
+        return false;
     }
 }
 
-void LamaAjar() {
-    masaajaran = tahunsekarang - digittahunajaran;
+void CheckLamaAjar(int digittahunajaran, int tahunsekarang) {
+    int masaajaran = tahunsekarang - digittahunajaran;
     cout << "Informasi: masa ajaran anda sudah " << masaajaran << " tahun." << endl;
-    confirm = true;
 }
 
-int main()
-{
-    cout << "Masukkan NPM: ";
-    cin >> npm;
-    thnmasuk = stoi(npm.substr(0, 2)); // Mengambil karakter pertama dan kedua dari npm
-    string tahunajaran = digit20 + to_string(thnmasuk);
-    cout;
-    digittahunajaran = stoi(tahunajaran);
-    tahunsekarang = 2023;
+int main() {
+    bool confirm;
+    char lanjut;
+    string npm;
+    int tahunsekarang = 2023, tahunmasuk, digittahunajaran, masaajaran;
 
-    CekNPM();
-    CekFasilkom();
-    LamaAjar();
+    do {
+        cout << "Masukkan NPM: ";
+        cin >> npm;
 
-    return 0; // Tambahkan ini untuk mengindikasikan keluar dari program dengan sukses
+        confirm = CheckNPM(npm, digittahunajaran, tahunsekarang);
+
+        if (confirm) {
+            confirm = CheckFasilkom(npm);
+            if (confirm) {
+                CheckLamaAjar(digittahunajaran, tahunsekarang);
+            }
+        }
+
+        cout << endl;
+    } while (!confirm);
+
+    return 0;
 }
