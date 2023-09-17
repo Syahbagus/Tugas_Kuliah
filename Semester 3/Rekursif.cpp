@@ -4,7 +4,7 @@ using namespace std;
 int oper, n;
 double x, hasil;
 
-double rekursif(double x, int n)
+double rekursif1(double x, int n)
 {
     if (n == 0)
     {
@@ -12,11 +12,39 @@ double rekursif(double x, int n)
     }
     else if (n > 0)
     {
-        return x * rekursif(x, n - 1);
+        return x * rekursif1(x, n - 1);
     }
     else if (n < 0)
     {
-        return 1 / rekursif(x, -n)
+        return 1 / rekursif1(x, -n);
+    }
+    else
+    {
+        cout << "Input tidak valid";
+        return 0;
+    }
+}
+
+double rekursif2(double x, int n)
+{
+    if (n == 0)
+    {
+        return 1;
+    }
+    else if (n % 2 == 0) // Untuk pangkat genap
+    {
+        double setengah = rekursif2(x, n / 2);
+        return setengah * setengah;
+    }
+    else if (n % 2 != 0) // Untuk pangkat ganjil
+    {
+        double setengah = rekursif2(x, (n - 1) / 2);
+        return x * setengah * setengah;
+    }
+    else
+    {
+        cout << "Input tidak valid";
+        return 0;
     }
 }
 
@@ -34,10 +62,25 @@ int main()
     {
         cout << "Masukkan nilai pokok X : ";
         cin >> x;
-        cout << endl;
         cout << "Masukan bilangan pangkat N : ";
         cin >> n;
         cout << endl;
-        hasil = rekursif(x, n);
+        hasil = rekursif1(x, n);
+        cout << "Hasil dari " << x << " pangkat " << n << " adalah : " << hasil << endl;
     }
+    else if (oper == 2)
+    {
+        cout << "Masukkan nilai pokok X : ";
+        cin >> x;
+        cout << "Masukan bilangan pangkat N : ";
+        cin >> n;
+        cout << endl;
+        hasil = rekursif2(x, n);
+        cout << "Hasil dari " << x << " pangkat " << n << " adalah : " << hasil << endl;
+    }
+    else
+    {
+        cout << "Operasi yang anda masukkan salah!";
+    }
+    return 0;
 }
